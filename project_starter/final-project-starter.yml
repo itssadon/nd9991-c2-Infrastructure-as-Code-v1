@@ -46,6 +46,15 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
+  # let's allocates an internet gateway for use with our VPC to enable resources (like EC2 instances) in our 
+  # public subnets to connect to the internet with a public IPv4 address. Similarly, resources on the
+  # internet can initiate a connection to resources in our subnet using the public IPv4 address
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref EnvironmentName
   # instace profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
   # never give too much permissions to your EC2 instances! if they get hacked, the permissions get hacked also!
   # in this example, I create a Role called UdacityS3ReadOnlyC2 and just give it a policy of S3 Read-Only Access
