@@ -206,8 +206,8 @@ Resources:
         Fn::ImportValue: !Sub "${EnvironmentName}-VPCID"
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 8080
-          ToPort: 8080
+          FromPort: 80
+          ToPort: 80
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 22
@@ -278,6 +278,20 @@ Resources:
           Values: [/]
       ListenerArn: !Ref "Listener"
       Priority: 1
+  WebAppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 8
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId:
+        Fn::ImportValue:
+          Fn::Sub: "${EnvironmentName}-VPCID"
   # instace profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
   # never give too much permissions to your EC2 instances! if they get hacked, the permissions get hacked also!
   # in this example, I create a Role called UdacityS3ReadOnlyC2 and just give it a policy of S3 Read-Only Access
