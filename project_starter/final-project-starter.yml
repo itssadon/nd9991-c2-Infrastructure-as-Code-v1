@@ -201,6 +201,21 @@ Outputs:
     Value: !Ref VPC
     Export:
       Name: !Sub ${EnvironmentName}-VPCID
+  VPCPublicRouteTable:
+    Description: Public Routing
+    Value: !Ref PublicRouteTable
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-RT
+  VPCPrivateRouteTable1:
+    Description: Private Routing AZ1
+    Value: !Ref PrivateRouteTable1
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI1-RT
+  VPCPrivateRouteTable2:
+    Description: Private Routing AZ2
+    Value: !Ref PrivateRouteTable2
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI2-RT
 # Sample UserData
 # When creating your Launch Configuration, you may need a UserData script
 # here's one that you can use for Ubuntu Linux that will:
