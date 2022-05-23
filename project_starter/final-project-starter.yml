@@ -236,6 +236,16 @@ Outputs:
     Value: !Ref PublicSubnet2
     Export:
       Name: !Sub ${EnvironmentName}-PUB2-SN
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI1-SN
+  PrivateSubnet2:
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI2-SN
 # Sample UserData
 # When creating your Launch Configuration, you may need a UserData script
 # here's one that you can use for Ubuntu Linux that will:
