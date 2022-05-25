@@ -13,7 +13,7 @@ Parameters:
       Description: AMI to use for our base image
       Type: String
 Resources:
-# IAM Role to allow EC2 Session Manager to access our server
+  # IAM Role to allow EC2 Session Manager to access our server
   RoleForSSMAccess: 
     Type: "AWS::IAM::Role"
     Properties:
