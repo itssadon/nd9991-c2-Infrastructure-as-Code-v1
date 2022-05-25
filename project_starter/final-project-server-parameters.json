@@ -1,0 +1,26 @@
+[
+	{
+		"ParameterKey": "EnvironmentName",
+		"ParameterValue": "UdacityProject"
+	},
+	{
+		"ParameterKey": "LaunchConfigAMI",
+		"ParameterValue": "ami-0747bdcabd34c712a"
+	},
+	{
+		"ParameterKey": "WebAppMinSize",
+		"ParameterValue": "1"
+	},
+	{
+		"ParameterKey": "WebAppMaxSize",
+		"ParameterValue": "3"
+	},
+	{
+		"ParameterKey": "BastionAMItoUse",
+		"ParameterValue": "ami-047a51fa27710816e"
+	},
+	{
+		"ParameterKey": "InstanceTypeToUse",
+		"ParameterValue": "t3.medium"
+	}
+]
