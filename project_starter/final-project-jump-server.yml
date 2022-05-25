@@ -1,0 +1,79 @@
+Description: >
+  Abubakar Hassan / ALX-T Cloud DevOps Engineer
+  This template uses a launch configuration to deploy for servers, two located in each of the private subnets.
+  The launch configuration is also used by the auto-scaling group.
+
+Parameters:
+  # Paramenters are entirely optional.
+  # but using them will make your cloudformation templates more reusable
+  # use them for things that may change over time, such as instance type,
+  # VPCs and so on.
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+  InstanceTypeToUse:
+    Description: Enter t2.micro, t3.medium, m1.small, or m1.large. Default is t2.micro.
+    Type: String
+    Default: t2.micro
+    AllowedValues: ["t2.micro", "t3.medium", "m1.small", "m1.large"]
+  BastionAMItoUse:
+    Description: AMI to use for our base image
+    Type: String
+
+Resources:
+  WebServerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our hosts and SSH from local only
+      VpcId:
+        Fn::ImportValue: !Sub ${EnvironmentName}-VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Web server Security Group
+  # Server EC2 Instance for Bastion Host
+  JumpServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceTypeToUse
+      ImageId: !Ref BastionAMItoUse
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - !Ref WebServerSecGroup
+          SubnetId:
+            Fn::ImportValue:
+              Fn::Sub: ${EnvironmentName}-PUB1-SN
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Bastion Host
+
+Outputs:
+  # This is also optional.
+  # Bonus points for useful outputs!
+  # for example, if you create a Load Balancer
+  # it's nice to output the URL to it here, so that we don't have to go to the console to get it.
+  InstanceId:
+    Description: "InstanceId of the newly created EC2 instance"
+    Value:
+      Ref: JumpServer
+  JumpServerIP:
+    Description: A reference to the Bastion Host server public IP
+    Value: !GetAtt JumpServer.PublicIp
+    Export:
+      Name: !Sub ${EnvironmentName}-JumpServer
+  JumpServerSecurityGroup:
+    Description: Bastion SecurityGroup Export
+    Value: !GetAtt WebServerSecGroup.GroupId
+    Export:
+      Name: !Sub ${EnvironmentName}-JumpServerSecurityGroupID
