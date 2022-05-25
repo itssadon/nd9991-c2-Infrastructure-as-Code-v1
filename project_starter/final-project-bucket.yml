@@ -1,0 +1,32 @@
+Description: >
+  Abubakar Hassan / ALX-T Cloud DevOps Engineer
+  This template deploys an S3 bucket for storing website files to be used later.
+
+Parameters:
+  # Paramenters are entirely optional.
+  # but using them will make your cloudformation templates more reusable
+  # use them for things that may change over time.
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+  BucketName:
+    Description: The bucket name
+    Type: String
+
+Resources:
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref BucketName
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName}-BUCKET
